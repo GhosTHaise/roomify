@@ -13,8 +13,10 @@ export const getOrCreateHostingConfig = async () : Promise<HostingConfig | null>
     try {
         const create = await puter.hosting.create(subdomain,'.');
 
-        return {subdomain: create.subdomain};
+        const record =  {subdomain: create.subdomain};
+        await puter.kv.set(HOSTING_CONFIG_KEY,record);
 
+        return record;
     } catch (error) {
         console.warn(`Could not create hosting config for ${subdomain}`, error);
         return null;
