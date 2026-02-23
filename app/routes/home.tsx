@@ -5,6 +5,8 @@ import Button from "~/components/ui/button";
 import Upload from "~/components/upload";
 import { useNavigate } from "react-router";
 import { v4 as uuidv4 } from 'uuid';
+import { useState } from "react";
+import { createProject } from "lib/puter.action";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -15,11 +17,39 @@ export function meta({ }: Route.MetaArgs) {
 
 export default function Home() {
   const navigate = useNavigate();
+  const [projects, setProjects] = useState<DesignItem[]>([]);
 
-  const handleUploadComplete = (base64Image: string) => {
+  const handleUploadComplete = async (base64Image: string) => {
     const newId = uuidv4();
 
-    navigate(`/visualizer/${newId}`);
+    const name = `Residence ${newId}`;
+    const newItem = {
+      id: newId,
+      name,
+      sourceImage: base64Image,
+      renderedImage: undefined,
+      timestamp: Date.now()
+    }
+
+    const saved = await createProject({
+      item: newItem,
+      visibility: "private"
+    })
+
+    if (!saved) {
+      console.error("Failed to create project")
+      return false
+    }
+
+    setProjects((prev) => [saved, ...prev]);
+
+    navigate(`/visualizer/${newId}`, {
+      state: {
+        initialImage: saved.sourceImage,
+        initialRendered: saved.renderedImage || null,
+        name
+      }
+    });
 
     return true;
   };
@@ -81,6 +111,36 @@ export default function Home() {
         </div>
 
         <div className="projects-grid">
+          {
+            projects.map(({ id, name, sourceImage, renderedImage, timestamp }) => (
+              <div key={id} className="project-card group">
+                <div className="preview">
+                  <img
+                    src={renderedImage || sourceImage}
+                    alt="project"
+                  />
+
+                  <div className="badge">
+                    <span>Community</span>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div>
+                    <h3>{name}</h3>
+
+                    <div className="meta">
+                      <Clock size={12} />
+                      <span>{new Date(timestamp).toLocaleDateString()}</span>
+                      <span>By Fitiavana Sambatra</span>
+                    </div>
+                  </div>
+                  <div className="arrow">
+                    <ArrowUpRight size={18} />
+                  </div>
+                </div>
+              </div>
+            ))
+          }
           <div className="project-card group">
             <div className="preview">
               <img
@@ -102,9 +162,9 @@ export default function Home() {
                   <span>By Fitiavana Sambatra</span>
                 </div>
               </div>
-                <div className="arrow">
-                  <ArrowUpRight size={18} />
-                </div>
+              <div className="arrow">
+                <ArrowUpRight size={18} />
+              </div>
             </div>
           </div>
         </div>
