@@ -12,7 +12,7 @@ const VisualizerId = () => {
   const hasInitialGenerated = useRef(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(initialRender || null);
-
+  
   const handleBack = () => navigate("/");
 
   const runGeneration = async () => {
@@ -29,6 +29,7 @@ const VisualizerId = () => {
         setCurrentImage(result.renderedImage);
 
         //updated the project with the rendered image.
+
       }
     } catch (error) {
       console.error("Generation failed", error);
