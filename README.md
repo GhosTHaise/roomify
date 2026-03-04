@@ -15,6 +15,11 @@ A modern, production-ready template for building full-stack React applications u
 - 📖 [React Router docs](https://reactrouter.com/)
 
 ## Getting Started
+<img width="1860" height="993" alt="image" src="https://github.com/user-attachments/assets/cb454748-dabf-48d5-a8d6-dd93836ba0ed" />
+<img width="1860" height="993" alt="image" src="https://github.com/user-attachments/assets/f9982547-5bdd-436a-9586-79778515fd66" />
+<img width="1860" height="993" alt="image" src="https://github.com/user-attachments/assets/8a0902d6-4a37-4901-b224-b4758d82b77c" />
+
+You can test it on : [roomify.mg](https://puter.com/app/roomify-37).
 
 ### Installation
 
